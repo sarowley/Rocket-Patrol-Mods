@@ -64,14 +64,24 @@ class Play extends Phaser.Scene {
         //game over flag
         this.gameOver = false;
 
+        //setting up high score
+        this.highScore = 0;
+        this.high_score_text = this.add.text(borderUISize + borderPadding + 150, borderUISize + borderPadding*2, this.highScore, scoreConfig);
+
+        //setting up fire ui
+        this.fire_text = this.add.text(borderUISize + borderPadding + 300, borderUISize + borderPadding*2, "FIRE", scoreConfig);
+        this.fire_text.setVisible(false);
+
+
         //60 second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+        //this.clock = this.time.delayedCall(5000, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
-    
+
     }
 
     update() {
@@ -84,6 +94,14 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
+        //code for high score
+        //recieved divine inspiration from "https://stackoverflow.com/questions/37408825/create-a-high-score-in-phaser#41656615"
+        this.high_score_text.text = localStorage.getItem("highScore");{
+            if (this.p1Score > localStorage.getItem("highScore")){
+                localStorage.setItem("highScore", this.p1Score);
+            }
+       }
+
         this.starfield.tilePositionX -= 4;
 
         if (!this.gameOver) {
@@ -92,6 +110,18 @@ class Play extends Phaser.Scene {
             this.ship02.update();
             this.ship03.update();
         }    
+
+        //doing fire button ui thing
+
+        if (this.p1Rocket.isFiring == true) {
+            this.fire_text.setVisible(true);
+        }
+
+        if (this.p1Rocket.isFiring == false) {
+            this.fire_text.setVisible(false);
+        }
+        
+
         //check collisions
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
             //console.log('sploosh kaboom ship 03');
