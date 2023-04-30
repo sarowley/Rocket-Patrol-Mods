@@ -32,6 +32,26 @@ class Play extends Phaser.Scene {
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
 
+        //doing the random direction spaceship start
+        //let number01 = Math.floor(Math.random() * 2);
+        let number01 = 0;
+        let number02 = Math.floor(Math.random() * 2);
+        let number03 = Math.floor(Math.random() * 2);
+        console.log(number01);
+        //console.log(number02);
+        //console.log(number03);
+        if (number01 == 0){
+                this.ship01.moveSpeed = game.settings.spaceshipSpeed *-1;
+        }
+        
+
+        //increasing the ships speed after 30 seconds
+        this.speed_clock = this.time.delayedCall(30000, () => {
+            this.ship03.moveSpeed = game.settings.spaceshipSpeed *1.5;
+            this.ship02.moveSpeed = game.settings.spaceshipSpeed *1.5;
+            this.ship01.moveSpeed = game.settings.spaceshipSpeed *1.5;
+            }, null, this);
+
         //define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
