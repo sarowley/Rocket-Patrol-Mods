@@ -9,7 +9,11 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
 
         //load music??
-        this.load.audio('music', './assets/elevator-music-bossa-nova-background-music-version-60s-10900.mp3');
+        //this.load.audio('music', './assets/elevator-music-bossa-nova-background-music-version-60s-10900.mp3');
+        this.load.audio('sfx_explosion01', './assets/appears-142455.mp3');
+        this.load.audio('sfx_explosion02', './assets/game-bonus-144751.mp3');
+        this.load.audio('sfx_explosion03', './assets/bell-transition-141421.mp3');
+        this.load.audio('sfx_explosion04', './assets/swoosh-142322.mp3');
     }
 
     create() {
@@ -25,6 +29,19 @@ class Menu extends Phaser.Scene {
             },
             fixedWidth: 0
         }
+
+        let smallmenuConfig = {
+          fontFamily: 'Courier',
+          fontSize: '18px',
+          backgroundColor: '#F3B141',
+          color: '#843605',
+          align: 'right',
+          padding: {
+              top: 5,
+              bottom: 5,
+          },
+          fixedWidth: 0
+      }
 
         this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, 'Use <--> arrows to move & (F) to fire', menuConfig).setOrigin(0.5);

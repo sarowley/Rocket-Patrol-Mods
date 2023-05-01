@@ -8,9 +8,14 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
-        this.load.image('nostromo', './assets/terribly_drawn_nostromo.png')
-        this.load.image('craft', './assets/craft.png')
-        this.load.image('shapes', './assets/shapes.png')
+        this.load.image('nostromo', './assets/terribly_drawn_nostromo.png');
+        this.load.image('craft', './assets/craft.png');
+        this.load.image('shapes', './assets/shapes.png');
+        this.load.image('kachow', './assets/kachow.png');
+
+        //load music
+        this.load.audio('music', './assets/elevator-music-bossa-nova-background-music-version-60s-10900.mp3');
+
         //load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
 
@@ -38,7 +43,7 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
 
         //add spaceship
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
+        this.ship01 = new FasterSpaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'kachow', 0, 50).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
 
@@ -92,8 +97,8 @@ class Play extends Phaser.Scene {
 
         //60 second play clock
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-        //this.clock = this.time.delayedCall(5000, () => {
+        //this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+        this.clock = this.time.delayedCall(5000, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
@@ -101,18 +106,33 @@ class Play extends Phaser.Scene {
 
 
         //play music??
-        this.sound.play('music');
+        //this.back_music = this.sound.add('music', { volume: 0.5, loop: true });
+        //this.back_music.play();
+
+        //var back_music = this.sound.add('music');
+        //back_music.on('stop', listener);
+        //back_music.play();
+        //back_music.stop();
+
 
     }
 
     update() {
 
+        //if (this.gameOver){
+            //back_music.stop();
+            //this.sound.get('music').stop();
+            //this.gameOver = false;
+        //}
+
         //check for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
+            //this.sound.get('music').stop();
         }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             this.scene.start("menuScene");
+            //this.sound.get('music').stop();
         }
 
         //code for high score
@@ -188,6 +208,19 @@ class Play extends Phaser.Scene {
         });
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
-        this.sound.play('sfx_explosion');
+        let number = Math.floor(Math.random() * 4)
+        //console.log(number);
+        if (number == 0) {
+            this.sound.play('sfx_explosion01');
+        }
+        if (number == 1) {
+            this.sound.play('sfx_explosion02');
+        }
+        if (number == 2) {
+            this.sound.play('sfx_explosion03');
+        }
+        if (number == 3) {
+            this.sound.play('sfx_explosion04');
+        }
     }
 }
