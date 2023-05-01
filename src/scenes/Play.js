@@ -31,6 +31,15 @@ class Play extends Phaser.Scene {
         this.nostromo = this.add.tileSprite(0,0,640,480, 'nostromo').setOrigin(0,0);
         this.craft = this.add.tileSprite(0,0,640,480, 'craft').setOrigin(0,0);
 
+
+        //trying my hand at particles
+        //const p = this.add.particles('kachow');
+        //const e = p.createEmitter();
+
+        //e.setPosition(400,300);
+        //e.setSpeed(200);
+        //e.setBlendMode(Phaser.BlendModes.ADD);
+
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x4b8be2).setOrigin(0, 0);
         // white borders
@@ -46,6 +55,7 @@ class Play extends Phaser.Scene {
         this.ship01 = new FasterSpaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'kachow', 0, 50).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+        this.timer_ship = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4 +10, 'spaceship', 0, 10).setOrigin(0,0);
 
         //increasing the ships speed after 30 seconds
         this.speed_clock = this.time.delayedCall(30000, () => {
@@ -97,13 +107,12 @@ class Play extends Phaser.Scene {
 
         //60 second play clock
         scoreConfig.fixedWidth = 0;
-        //this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-        this.clock = this.time.delayedCall(5000, () => {
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
+        //this.clock = this.time.delayedCall(5000, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or <- for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
-
 
         //play music??
         //this.back_music = this.sound.add('music', { volume: 0.5, loop: true });
@@ -113,6 +122,29 @@ class Play extends Phaser.Scene {
         //back_music.on('stop', listener);
         //back_music.play();
         //back_music.stop();
+
+        let timeConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#f34183',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 110
+        }
+
+
+        for (let i = game.settings.gameTimer; i > 0; i -= 1000){
+        this.clock = this.time.delayedCall(i, () => {
+            //console.log('yo whatup');
+            this.timer = this.add.text(borderUISize + borderPadding + 418, borderUISize + borderPadding*2, (game.settings.gameTimer - i)/1000, timeConfig);
+            //this.timer = this.add.text(borderUISize + borderPadding + 450, borderUISize + borderPadding*2, 9, scoreConfig);
+            //console.log((game.settings.gameTimer - i)/1000);
+        }, null, this);
+    }
 
 
     }
@@ -124,6 +156,29 @@ class Play extends Phaser.Scene {
             //this.sound.get('music').stop();
             //this.gameOver = false;
         //}
+        //console.log(mouse_check);
+        if (mouse_check == true){
+            if (this.game.input.mousePointer.x > this.p1Rocket.x){
+                //this.p1Rocket += 2;
+                //console.log(this.game.input.mousePointer.x)
+                //console.log(this.game.input.mousePointer.y)
+                this.p1Rocket.moveRight();
+            }
+            if (this.game.input.mousePointer.x < this.p1Rocket.x) {
+                //this.p1Rocket -= 2;
+                //console.log(this.game.input.mousePointer.x)
+                //console.log(this.game.input.mousePointer.y)
+                this.p1Rocket.moveLeft();
+            }
+        
+
+            if (this.input.activePointer.isDown){
+                //console.log("click")
+                this.p1Rocket.launch();
+            }
+        }
+
+
 
         //check for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
