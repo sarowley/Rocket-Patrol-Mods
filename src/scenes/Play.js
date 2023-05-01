@@ -8,16 +8,26 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield.png');
+        this.load.image('nostromo', './assets/terribly_drawn_nostromo.png')
+        this.load.image('craft', './assets/craft.png')
+        this.load.image('shapes', './assets/shapes.png')
         //load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+
     }
 
     create() {
         //this.add.text(20,20, "Rocket Patrol Play");
         // place tile sprite
         this.starfield = this.add.tileSprite(0,0,640,480, 'starfield').setOrigin(0,0);
+
+        //adding my stuff
+        this.shapes = this.add.tileSprite(0,0,640,480, 'shapes').setOrigin(0,0);
+        this.nostromo = this.add.tileSprite(0,0,640,480, 'nostromo').setOrigin(0,0);
+        this.craft = this.add.tileSprite(0,0,640,480, 'craft').setOrigin(0,0);
+
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x4b8be2).setOrigin(0, 0);
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -31,19 +41,6 @@ class Play extends Phaser.Scene {
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
-
-        //doing the random direction spaceship start
-        //let number01 = Math.floor(Math.random() * 2);
-        let number01 = 0;
-        let number02 = Math.floor(Math.random() * 2);
-        let number03 = Math.floor(Math.random() * 2);
-        console.log(number01);
-        //console.log(number02);
-        //console.log(number03);
-        if (number01 == 0){
-                this.ship01.moveSpeed = game.settings.spaceshipSpeed *-1;
-        }
-        
 
         //increasing the ships speed after 30 seconds
         this.speed_clock = this.time.delayedCall(30000, () => {
@@ -71,7 +68,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
+            backgroundColor: '#f34183',
             color: '#843605',
             align: 'right',
             padding: {
@@ -102,6 +99,10 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
         }, null, this);
 
+
+        //play music??
+        this.sound.play('music');
+
     }
 
     update() {
@@ -123,6 +124,11 @@ class Play extends Phaser.Scene {
        }
 
         this.starfield.tilePositionX -= 4;
+        //paralax stuff
+        this.shapes.tilePositionX +=4;
+        this.nostromo.tilePositionX -=2;
+        this.nostromo.tilePositionY -=2;
+        this.craft.tilePositionX -=1;
 
         if (!this.gameOver) {
             this.p1Rocket.update();
