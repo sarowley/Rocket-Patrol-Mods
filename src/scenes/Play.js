@@ -14,7 +14,7 @@ class Play extends Phaser.Scene {
         this.load.image('kachow', './assets/kachow.png');
 
         //load music
-        this.load.audio('music', './assets/elevator-music-bossa-nova-background-music-version-60s-10900.mp3');
+        //this.load.audio('music', './assets/elevator-music-bossa-nova-background-music-version-60s-10900.mp3');
 
         //load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
